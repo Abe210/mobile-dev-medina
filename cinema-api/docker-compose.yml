@@ -1,0 +1,15 @@
+version: "3.1"
+
+services:
+  mariadb:
+    image: mariadb:11.0.1-rc-jammy
+    container_name: cinema_api_mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: cinema
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    ports:
+      - 3306:3306
