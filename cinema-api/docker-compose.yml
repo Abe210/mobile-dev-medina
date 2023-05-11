@@ -6,10 +6,19 @@ services:
     container_name: cinema_api_mariadb
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-      MARIADB_DATABASE: cinema
-      MARIADB_USER: admin
-      MARIADB_PASSWORD: admin
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     volumes:
-      - ./mariadb:/var/lib/mysql
+      - ${PWD}/mariadb/:/var/lib/mysql
+      - ./db_script/:/docker-entrypoint-initdb.d:ro
     ports:
       - 3306:3306
+
+  adminer:
+    image: iutsd/adminer
+    container_name: cinema_api_adminer
+    build:
+      context: ./adminer
+    ports:
+      - 8001:80
