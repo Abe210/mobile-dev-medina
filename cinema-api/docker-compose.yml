@@ -38,3 +38,11 @@ services:
       PHP_CRUD_API_USERNAME: cinema
       PHP_CRUD_API_PASSWORD: admin
       PHP_CRUD_API_DEBUG: 1
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:v4.18.3
+    container_name: cinema_api_swagger_ui
+    ports:
+      - 8003:8080
+    environment:
+      API_URL: http://localhost:8002/openapi
