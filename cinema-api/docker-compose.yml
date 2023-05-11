@@ -1,6 +1,18 @@
 version: "3.1"
 
 services:
+  # This is not really needed, just for me
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: cinema_api_phpmyadmin
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: ${MARIADB_USER}
+      PMA_PASSWORD: ${MARIADB_PASSWORD}
+    ports:
+      - 8000:80
+  ################
   mariadb:
     image: mariadb:11.0.1-rc-jammy
     container_name: cinema_api_mariadb
