@@ -22,3 +22,19 @@ services:
       context: ./adminer
     ports:
       - 8001:80
+
+  php_crud_api:
+    image: iutsd/php-crud-api
+    container_name: cinema_api_php_crud_api
+    build:
+      context: ./php-crud-api
+    ports:
+      - 8002:80
+    environment:
+      PHP_CRUD_API_DRIVER: mysql
+      PHP_CRUD_API_ADDRESS: mariadb
+      PHP_CRUD_API_PORT: 3306
+      PHP_CRUD_API_DATABASE: cinema
+      PHP_CRUD_API_USERNAME: cinema
+      PHP_CRUD_API_PASSWORD: admin
+      PHP_CRUD_API_DEBUG: 1
