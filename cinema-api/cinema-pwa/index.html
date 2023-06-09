@@ -1,194 +1,243 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Cinema</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#336699"/>
-    <link rel="manifest" href="manifest.json" />    
-    <script>//navigator.serviceWorker.register("service-worker.js")</script> 
-    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
-    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
-    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-</head>
-<body>
-  <ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Cinema</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" content="#336699" />
+		<link rel="manifest" href="manifest.json" />
+		<script>
+			//navigator.serviceWorker.register("service-worker.js")
+		</script>
+		<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
+		<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css" />
+		<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	</head>
+	<body>
+		<ons-navigator swipeable id="myNavigator" page="home.html">
+			<ons-page>
+				<ons-toolbar>
+					<div class="center">Cinema</div>
+				</ons-toolbar>
+			</ons-page>
+		</ons-navigator>
 
-  <template id="page1.html">
-    <ons-page id="page1">
-      <ons-toolbar>
-        <div class="left"><ons-back-button>Home</ons-back-button></div>
-        <div class="center">Acteurs</div>
-      </ons-toolbar>
-      <ons-list>
-        <ons-lazy-repeat></ons-lazy-repeat>
-      </ons-list>
-    </ons-page>
-  </template>
+		<template id="home.html">
+			<ons-page id="home">
+				<ons-icon icon="fa-map-marker" size="28px" onclick="document.querySelector('#myNavigator').pushPage('carte.html')"> </ons-icon>
+				<ons-icon icon="fa-theater-masks" size="28px" onclick="document.querySelector('#myNavigator').pushPage('page1.html')"> </ons-icon>
+			</ons-page>
+		</template>
 
-  <template id="ligne_personne">
-    <ons-list-item modifier="chevron" tappable>
-      <div class="left">
-        <img class="list-item__thumbnail" src="photos/actor_default.jpg">
-      </div>
-      <div class="center">
-        <span class="list-item__title">
-          <span class="prenom"></span>&nbsp;
-          <strong class="nom"></strong>
-        </span>
-        <span class="list-item__subtitle">
-          <span class="naissance"></span>&nbsp;
-          <span class="deces"></span>
-        </span>
-      </div>
-      
-    </ons-list-item>
-  </template>
+		<template id="carte.html">
+			<ons-page id="carte">
+				<ons-toolbar>
+					<div class="left">
+						<ons-back-button>Home</ons-back-button>
+					</div>
+					<div class="center">Carte</div>
+				</ons-toolbar>
+				<div id="map" style="height: 100vh"></div>
+			</ons-page>
+		</template>
 
-  <template id="ligne_film">
-    <ons-list-item modifier="chevron" tappable>
-      <div class="left">
-        <img src="films/1x1.png" width="100">
-      </div>
-      <div class="center">
-        <span class="list-item__title">
-          <span class="titre"></span>
-        </span>
-        <span class="list-item__subtitle">
-          <span class="role"></span>&nbsp;
-          <span class="alias"></span>
-        </span>
-      </div>
-      
-    </ons-list-item>
-  </template>
+		<template id="page1.html">
+			<ons-page id="page1">
+				<ons-toolbar>
+					<div class="left"><ons-back-button>Home</ons-back-button></div>
+					<div class="center">Acteurs</div>
+				</ons-toolbar>
+				<ons-list>
+					<ons-lazy-repeat></ons-lazy-repeat>
+				</ons-list>
+			</ons-page>
+		</template>
 
+		<template id="ligne_personne">
+			<ons-list-item modifier="chevron" tappable>
+				<div class="left">
+					<img class="list-item__thumbnail" src="photos/actor_default.jpg" />
+				</div>
+				<div class="center">
+					<span class="list-item__title">
+						<span class="prenom"></span>&nbsp;
+						<strong class="nom"></strong>
+					</span>
+					<span class="list-item__subtitle">
+						<span class="naissance"></span>&nbsp;
+						<span class="deces"></span>
+					</span>
+				</div>
+			</ons-list-item>
+		</template>
 
+		<template id="ligne_film">
+			<ons-list-item modifier="chevron" tappable>
+				<div class="left">
+					<img src="films/1x1.png" width="100" />
+				</div>
+				<div class="center">
+					<span class="list-item__title">
+						<span class="titre"></span>
+					</span>
+					<span class="list-item__subtitle">
+						<span class="role"></span>&nbsp;
+						<span class="alias"></span>
+					</span>
+				</div>
+			</ons-list-item>
+		</template>
 
-  <template id="page2.html">
-    <ons-page id="page2">
-      <ons-toolbar>
-        <div class="left"><ons-back-button>Page 1</ons-back-button></div>
-        <div class="center"></div>
-      </ons-toolbar>
-      <ons-list>
-      </ons-list>
-    </ons-page>
-  </template>
+		<template id="page2.html">
+			<ons-page id="page2">
+				<ons-toolbar>
+					<div class="left"><ons-back-button>Page 1</ons-back-button></div>
+					<div class="center"></div>
+				</ons-toolbar>
+				<ons-list> </ons-list>
+			</ons-page>
+		</template>
 
-<script>
+		<script>
+			let listedesacteurs = [];
 
-  let listedesacteurs = [];
+			document.addEventListener("init", function (event) {
+				var page = event.target;
 
-  document.addEventListener('init', function(event) {
-    var page = event.target;
+				if (page.id === "carte") {
+					var map = L.map("map").setView([48.004696, 6.873744], 10);
+					L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+						maxZoom: 19,
+						attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+					}).addTo(map);
 
-    if (page.id === 'page1') {
-      getPersonnes();
-    } else if (page.id === 'page2') {
-      page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
-      getFilms(page.data.id);
-    }
-  });
+					map.on("moveend", function () {
+						updateMap(map);
+					});
+					map.on("zoomend", function () {
+						updateMap(map);
+					});
 
-  async function getPersonnes() {
-    const data = await fetch('http://127.0.0.1:8002/records/Personne');
-    const personnes = await data.json();
-    
-    listedesacteurs = personnes.records;
+				} else if (page.id === "page1") {
+					getPersonnes();
+				} else if (page.id === "page2") {
+					page.querySelector("ons-toolbar .center").innerHTML = page.data.title;
+					getFilms(page.data.id);
+				}
+			});
 
-    const liste = document.querySelector("#page1 ons-lazy-repeat");
+			async function getPersonnes() {
+				const data = await fetch("http://127.0.0.1:8002/records/Personne");
+				const personnes = await data.json();
 
-    liste.delegate = {
-      countItems: () => listedesacteurs.length,
-      createItemContent: createLigneActeur
-    }   
-  }
+				listedesacteurs = personnes.records;
 
-  function createLigneActeur(index) {
+				const liste = document.querySelector("#page1 ons-lazy-repeat");
 
-    const personne = listedesacteurs[index];
+				liste.delegate = {
+					countItems: () => listedesacteurs.length,
+					createItemContent: createLigneActeur,
+				};
+			}
 
-    const modele = document.querySelector("#ligne_personne");
-    const fragement = modele.content.cloneNode(true);
+			function createLigneActeur(index) {
+				const personne = listedesacteurs[index];
 
-    fragement.querySelector(".nom")
-      .appendChild(document.createTextNode(personne.nom));
-    fragement.querySelector(".prenom")
-      .appendChild(document.createTextNode(personne.prenom));
+				const modele = document.querySelector("#ligne_personne");
+				const fragement = modele.content.cloneNode(true);
 
-    loadImage(`photos/${personne.id}.jpg`, 
-      fragement.querySelector(".list-item__thumbnail"));
+				fragement.querySelector(".nom").appendChild(document.createTextNode(personne.nom));
+				fragement.querySelector(".prenom").appendChild(document.createTextNode(personne.prenom));
 
-    const international = new Intl.DateTimeFormat("fr-FR", {
-            year: "numeric",
-            month:"short",
-            day:"numeric",
-            weekday:"long"
-          });
+				loadImage(`photos/${personne.id}.jpg`, fragement.querySelector(".list-item__thumbnail"));
 
-    let naissance = new Date(personne.naissance)
-    let naissanceformat = international.format(naissance);
+				const international = new Intl.DateTimeFormat("fr-FR", {
+					year: "numeric",
+					month: "short",
+					day: "numeric",
+					weekday: "long",
+				});
 
-    fragement.querySelector(".naissance")
-      .appendChild(document.createTextNode(naissanceformat));
+				let naissance = new Date(personne.naissance);
+				let naissanceformat = international.format(naissance);
 
-    // court-circuit &&
-    personne.deces && fragement.querySelector(".deces")
-      .appendChild(document.createTextNode(
-        international.format(new Date(personne.deces))));
+				fragement.querySelector(".naissance").appendChild(document.createTextNode(naissanceformat));
 
+				// court-circuit &&
+				personne.deces && fragement.querySelector(".deces").appendChild(document.createTextNode(international.format(new Date(personne.deces))));
 
-    fragement.firstElementChild.addEventListener("click", function(evt) {
-      document.querySelector("#myNavigator").pushPage('page2.html', {
-        data: { 
-          title: `${personne.prenom} ${personne.nom}`,
-          id: evt.currentTarget.dataset.uuid
-        } });
-    });
+				fragement.firstElementChild.addEventListener("click", function (evt) {
+					document.querySelector("#myNavigator").pushPage("page2.html", {
+						data: {
+							title: `${personne.prenom} ${personne.nom}`,
+							id: evt.currentTarget.dataset.uuid,
+						},
+					});
+				});
 
-    fragement.firstElementChild.dataset.uuid = personne.id;
-    //liste.appendChild(fragement);
-    return fragement.firstElementChild; 
-  }
+				fragement.firstElementChild.dataset.uuid = personne.id;
+				//liste.appendChild(fragement);
+				return fragement.firstElementChild;
+			}
 
-  // Closure : Les variables de la fonction parente (loadImage)
-  // sont capturées par les fonctions locales onload et onerror
-  function loadImage(source, element) 
-  {
-    let photo = new Image;
-    photo.src = source;
+			// Closure : Les variables de la fonction parente (loadImage)
+			// sont capturées par les fonctions locales onload et onerror
+			function loadImage(source, element) {
+				let photo = new Image();
+				photo.src = source;
 
-    photo.onload = function() {
-      console.log("trouvé");
-      element.setAttribute("src", source);
-    }
+				photo.onload = function () {
+					console.log("trouvé");
+					element.setAttribute("src", source);
+				};
 
-    photo.onerror = function() {
-      console.log("absent");
-    }
-  }
+				photo.onerror = function () {
+					console.log("absent");
+				};
+			}
 
-  async function getFilms(uuid) 
-  {
-    const data = await fetch(`http://127.0.0.1:8002/records/Personne/${uuid}?join=Equipe%2CFilm`);
-    const personne = await data.json();
+			async function getFilms(uuid) {
+				const data = await fetch(`http://127.0.0.1:8002/records/Personne/${uuid}?join=Equipe%2CFilm`);
+				const personne = await data.json();
 
-    const liste = document.querySelector("#page2 ons-list");
+				const liste = document.querySelector("#page2 ons-list");
 
-    for (let equipe of personne.Equipe) {
-      const modele = document.querySelector("#ligne_personne");
-      const fragement = modele.content.cloneNode(true);
+				for (let equipe of personne.Equipe) {
+					const modele = document.querySelector("#ligne_personne");
+					const fragement = modele.content.cloneNode(true);
 
-      fragement.querySelector(".titre")
-        .appendChild(document.createTextNode(equipe.film.titre));
-      fragement.querySelector(".annee")
-        .appendChild(document.createTextNode(equipe.film.annee));
+					fragement.querySelector(".titre").appendChild(document.createTextNode(equipe.film.titre));
+					fragement.querySelector(".annee").appendChild(document.createTextNode(equipe.film.annee));
 
-      liste.appendChild(fragement);
+					liste.appendChild(fragement);
+				}
+			}
 
-    }
-  }
-</script>
-</body>
+			async function getCinemaLocations(map, bbox) {
+				const data = await fetch(`http://127.0.0.1:8002/geojson/Cinema?bbox=${bbox}`);
+				const FeatureCollection = await data.json();
+				console.log(FeatureCollection);
+
+				for (let feature of FeatureCollection.features) {
+					const coord = feature.geometry.coordinates;
+					const latlng = L.latLng(coord[0], coord[1]);
+					if (!map.getBounds().contains(latlng)) {
+						continue;
+					}
+					const marker = L.marker(latlng).addTo(map);
+					marker.bindPopup(feature.properties.nom);
+				}
+			}
+
+			function updateMap(map) {
+				const bounds = map.getBounds();
+				console.log(bounds);
+				const bbox = `${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()}`;
+				console.log(bbox);
+				getCinemaLocations(map, bbox);
+			}
+		</script>
+	</body>
 </html>
