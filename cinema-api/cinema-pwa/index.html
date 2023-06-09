@@ -21,34 +21,37 @@
 				<ons-toolbar>
 					<div class="center">Cinema</div>
 				</ons-toolbar>
+				<ons-tabbar position="top">
+					<ons-tab label="Home" icon="md-home" page="home.html" active></ons-tab>
+					<ons-tab label="Carte" icon="fa-map-marker" page="carte.html"></ons-tab>
+					<ons-tab label="Acteurs" icon="fa-theater-masks" page="page1.html"></ons-tab>
+				</ons-tabbar>
 			</ons-page>
 		</ons-navigator>
 
 		<template id="home.html">
 			<ons-page id="home">
-				<ons-icon icon="fa-map-marker" size="28px" onclick="document.querySelector('#myNavigator').pushPage('carte.html')"> </ons-icon>
-				<ons-icon icon="fa-theater-masks" size="28px" onclick="document.querySelector('#myNavigator').pushPage('page1.html')"> </ons-icon>
 			</ons-page>
 		</template>
 
 		<template id="carte.html">
 			<ons-page id="carte">
-				<ons-toolbar>
+				<!-- <ons-toolbar>
 					<div class="left">
 						<ons-back-button>Home</ons-back-button>
 					</div>
 					<div class="center">Carte</div>
-				</ons-toolbar>
+				</ons-toolbar> -->
 				<div id="map" style="height: 100vh"></div>
 			</ons-page>
 		</template>
 
 		<template id="page1.html">
 			<ons-page id="page1">
-				<ons-toolbar>
+				<!-- <ons-toolbar>
 					<div class="left"><ons-back-button>Home</ons-back-button></div>
 					<div class="center">Acteurs</div>
-				</ons-toolbar>
+				</ons-toolbar> -->
 				<ons-list>
 					<ons-lazy-repeat></ons-lazy-repeat>
 				</ons-list>
