@@ -14,49 +14,60 @@
 		<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<ons-navigator swipeable id="myNavigator" page="home.html">
-			<ons-page>
-				<ons-toolbar>
-					<div class="center">Cinema</div>
+		<ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
+
+		<ons-page>
+			<ons-toolbar>
+				<div class="center">Cinema</div>
+			</ons-toolbar>
+			<ons-tabbar position="top">
+				<ons-tab label="Home" icon="md-home" page="home.html" active></ons-tab>
+				<ons-tab label="Carte" icon="fa-map-marker" page="carte.html"></ons-tab>
+				<ons-tab label="Acteurs" icon="fa-theater-masks" page="page1.html"></ons-tab>
+			</ons-tabbar>
+		</ons-page>
+
+		<template id="tabbar.html">
+			<ons-page id="tabbar" >
+				<ons-toolbar >
+					<div class="center" >Cinema</div>
 				</ons-toolbar>
-				<ons-tabbar position="top">
+				<ons-tabbar position="top" >
 					<ons-tab label="Home" icon="md-home" page="home.html" active></ons-tab>
 					<ons-tab label="Carte" icon="fa-map-marker" page="carte.html"></ons-tab>
 					<ons-tab label="Acteurs" icon="fa-theater-masks" page="page1.html"></ons-tab>
 				</ons-tabbar>
 			</ons-page>
-		</ons-navigator>
+		</template>
+		
 
 		<template id="home.html">
 			<ons-page id="home">
-			</ons-page>
-		</template>
-
-		<template id="carte.html">
-			<ons-page id="carte">
-				<!-- <ons-toolbar>
-					<div class="left">
-						<ons-back-button>Home</ons-back-button>
+				<div style="width: 100vw;">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+						<path fill="#663399" d="M0 0h32v28q-16 5 -32 0" />
+						<text fill="#FFFFFF" font-size="3px" font-weight="bold" font-family="Arial" x="16" y="5" text-anchor="middle">Cinema</text>
+						<path fill="#FFFFFF" d="m 7.49,13.72 v 8.9 a 1.92,1.92 0 0 0 1.92,1.92 h 13.8 a 1.92,1.92 0 0 0 1.92,-1.92 v -7.93 a 1,1 0 0 0 -1,-1 H 7.49 m 10.84,5.81 -2.56,2 a 0.53,0.53 0 0 1 -0.75,0 0.51,0.51 0 0 1 -0.15,-0.37 V 17.1 a 0.52,0.52 0 0 1 0.9,-0.37 l 2.56,2 a 0.53,0.53 0 0 1 0,0.77 z" />
+						<path fill="#FFFFFF" d="M 24.83,10.33 24.56,8.39 A 1,1 0 0 0 23.47,7.57 h -0.3 l -1,3.11 -2.79,0.39 1,-3.11 -1.07,0.15 -1.58,0.22 -1,3.11 -2.73,0.42 1,-3.1 -1.1,0.15 -1.55,0.22 -1,3.1 -2.78,0.39 1,-3.11 -1.67,0.23 a 1,1 0 0 0 -0.82,1.08 v 0 l 0.28,2 0.13,0.93 L 24,11.42 a 1,1 0 0 0 0.83,-1.08 z" />
+					</svg>
+					<div class="home-top" >
+						<div class="icon-wrapper">
+							<ons-icon icon="fa-map-marker" size="28px" onclick="document.querySelector('ons-tabbar').setActiveTab(1)"></ons-icon>
+						</div>
+						<div class="icon-wrapper">
+							<ons-icon icon="fa-theater-masks" size="28px" onclick="document.querySelector('ons-tabbar').setActiveTab(2)"></ons-icon>
+						</div>
 					</div>
-					<div class="center">Carte</div>
-				</ons-toolbar> -->
-				<div id="map" style="height: 100vh"></div>
+				</div>
 			</ons-page>
 		</template>
 
-		<template id="page1.html">
-			<ons-page id="page1">
-				<!-- <ons-toolbar>
-					<div class="left"><ons-back-button>Home</ons-back-button></div>
-					<div class="center">Acteurs</div>
-				</ons-toolbar> -->
-				<ons-list>
-					<ons-lazy-repeat></ons-lazy-repeat>
-				</ons-list>
-			</ons-page>
-		</template>
+		<template page="carte.html"></template>
+
+		<template page="page1.html"></template>
 
 		<template id="ligne_personne">
 			<ons-list-item modifier="chevron" tappable>
@@ -99,37 +110,126 @@
 					<div class="left"><ons-back-button>Page 1</ons-back-button></div>
 					<div class="center"></div>
 				</ons-toolbar>
-				<ons-list> </ons-list>
+				<ons-list>
+					<ons-list-header>Acteurs</ons-list-header>
+					<ons-list-item modifier="chevron" tappable>
+						<div class="left">
+							<img class="list-item__thumbnail" src="photos/actor_default.jpg" />
+						</div>
+						<div class="center">
+							<span class="list-item__title">
+								<span class="prenom"></span>&nbsp;
+								<strong class="nom"></strong>
+							</span>
+							<span class="list-item__subtitle">
+								<span class="naissance"></span>&nbsp;
+								<span class="deces"></span>
+							</span>
+						</div>
+					</ons-list-item>
+				</ons-list>
 			</ons-page>
 		</template>
 
 		<script>
 			let listedesacteurs = [];
+			var map = null;
+			var pointsID = new Set();
+
+			document.addEventListener('prechange', function (event) {
+				console.log('prechange', event);
+				var activeTab = document.querySelector("ons-tabbar").getActiveTabIndex();
+				var selectedTabIndex = event.index;
+
+				if (activeTab === tabIndex.carte) {
+					removeCarte();
+				}
+
+				switch(selectedTabIndex){
+					case tabIndex.home:
+						console.log("home");
+						break;
+					case tabIndex.carte:
+						initCarte();
+						break;
+					case tabIndex.acteurs:
+						getPersonnes();
+						break;
+					case tabIndex.films:
+						console.log("films");
+						break;
+					default:
+						console.log("default");
+						break;
+				}
+			});
 
 			document.addEventListener("init", function (event) {
 				var page = event.target;
+				console.log(page);
+				console.log(page.hasAttribute("data-skip-init"));
+				var activeTab = document.querySelector("ons-tabbar").getActiveTabIndex();
 
-				if (page.id === "carte") {
-					var map = L.map("map").setView([48.004696, 6.873744], 10);
-					L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-						maxZoom: 19,
-						attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-					}).addTo(map);
+				console.log("init", page.id, "activeTab", activeTab);
 
-					map.on("moveend", function () {
-						updateMap(map);
-					});
-					map.on("zoomend", function () {
-						updateMap(map);
-					});
-
-				} else if (page.id === "page1") {
+				if (page.id === "home" && activeTab === 0) {
+					console.log("init home");
+				} else if (page.id === "carte" && activeTab === 1) {
+					initCarte();
+				} else if (page.id === "page1" && activeTab === 2) {
 					getPersonnes();
 				} else if (page.id === "page2") {
 					page.querySelector("ons-toolbar .center").innerHTML = page.data.title;
 					getFilms(page.data.id);
+				}else{
+					console.log("init page inconnue");
 				}
 			});
+
+			function initHome() {
+				console.log("init home");
+			}
+
+			function initCarte(){
+				map = L.map("map").setView([48.004696, 6.873744], 10);
+				L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+					maxZoom: 19,
+					attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+				}).addTo(map);
+				map.locate({setView: true, maxZoom: 16});
+
+				getCinemaLocations(map, getMapBoundingBox(map));
+				
+				map.on("moveend", function () {
+					//removeAllMarkers(map);
+					updateMap(map);
+				});
+				map.on("zoomend", function () {
+					//removeAllMarkers(map);
+					updateMap(map);
+				});
+
+				map.on('locationfound', onLocationFound);
+				map.on('locationerror', onLocationError);
+			}
+
+			function onLocationFound(e) {
+				var radius = e.accuracy / 2;
+
+				L.marker(e.latlng).addTo(map)
+					.bindPopup("Vous êtes dans un rayon de " + radius + " mètres de ce point").openPopup();
+
+				L.circle(e.latlng, radius).addTo(map);
+			}
+
+			function onLocationError(e) {
+				alert(e.message);
+			}
+
+			function removeCarte(){
+				pointsID = new Set();
+				map.remove();
+			}
 
 			async function getPersonnes() {
 				const data = await fetch("http://127.0.0.1:8002/records/Personne");
@@ -216,31 +316,59 @@
 
 					liste.appendChild(fragement);
 				}
+
+
 			}
 
 			async function getCinemaLocations(map, bbox) {
 				const data = await fetch(`http://127.0.0.1:8002/geojson/Cinema?bbox=${bbox}`);
 				const FeatureCollection = await data.json();
-				console.log(FeatureCollection);
 
 				for (let feature of FeatureCollection.features) {
 					const coord = feature.geometry.coordinates;
 					const latlng = L.latLng(coord[0], coord[1]);
-					if (!map.getBounds().contains(latlng)) {
+					const id = feature.id;
+
+					if(pointsID.has(id)){
 						continue;
 					}
-					const marker = L.marker(latlng).addTo(map);
-					marker.bindPopup(feature.properties.nom);
+					pointsID.add(id);
+					createMarker(map, feature);
 				}
 			}
 
-			function updateMap(map) {
+			function getMapBoundingBox(map) {
 				const bounds = map.getBounds();
-				console.log(bounds);
 				const bbox = `${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()}`;
-				console.log(bbox);
+				return bbox;
+			}
+
+			function createMarker(map, feature){
+				const coord = feature.geometry.coordinates;
+				const latlng = L.latLng(coord[0], coord[1]);
+				const marker = L.marker(latlng).addTo(map);
+				marker.bindPopup(feature.properties.nom);
+			}
+
+			function removeAllMarkers(map) {
+				map.eachLayer(function (layer) {
+					if (layer instanceof L.Marker) {
+						map.removeLayer(layer);
+					}
+				});
+			}
+
+			function updateMap(map) {
+				const bbox = getMapBoundingBox(map);
 				getCinemaLocations(map, bbox);
 			}
+
+			const tabIndex = {
+				home: 0,
+				carte: 1,
+				acteurs: 2,
+				page2: 3,
+			};
 		</script>
 	</body>
 </html>
