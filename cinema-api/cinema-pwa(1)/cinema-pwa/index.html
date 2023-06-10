@@ -128,7 +128,6 @@
 				</ons-toolbar>
 
 				<div class="title"></div>
-
         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50" viewBox="0 0 500 100">
           <path d="m50,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
           <path d="m130,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
@@ -136,22 +135,24 @@
           <path d="m290,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
           <path d="m370,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
         </svg> -->
-
-        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 500 100">
-          <defs>
-            <symbol id="star" >
-              <path d="m50,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
-            </symbol>
-          </defs>
-          <use xlink:href="#star" x="0" y="0" />
-          <use xlink:href="#star" x="100" y="0" />
-          <use xlink:href="#star" x="200" y="0" />
-          <use xlink:href="#star" x="300" y="0" />
-          <use xlink:href="#star" x="400" y="0" />
-        </svg>
         
+        <div class="note">
+          <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 500 100">
+            <defs>
+              <symbol id="star" >
+                <path d="m50,2 12,34h36l-28,22 10,34-30-20-30,20 10-34-28-22h36z" />
+              </symbol>
+            </defs>
+            <use xlink:href="#star" x="0" y="0" onclick="Voter(1)"/>
+            <use xlink:href="#star" x="100" y="0" onclick="Voter(2)"/>
+            <use xlink:href="#star" x="200" y="0" onclick="Voter(3)"/>
+            <use xlink:href="#star" x="300" y="0" onclick="Voter(4)"/>
+            <use xlink:href="#star" x="400" y="0" onclick="Voter(5)"/>
+          </svg>
+        </div>
 			</ons-page>
 		</template>
+
 		<script>
 			let listedesacteurs = [];
 			let listeMarqueurs = new Set(); //Ensemble d'éléments uniques
@@ -283,12 +284,14 @@
 					fragement.querySelector(".titre").appendChild(document.createTextNode(equipe.film.titre));
 					/*fragement.querySelector(".annee")
         .appendChild(document.createTextNode(equipe.film.annee));*/
-
+        
 					fragement.firstElementChild.addEventListener("click", function (evt) {
-						document.querySelector("#myNavigator").pushPage("film.html", {
+						document.querySelector("#myNavigator").pushPage("fifilmlm.html", {
 							data: {
 								title: `${equipe.film.titre}`,
 								id: evt.currentTarget.dataset.uuid,
+                note_moyenne: evt.currentTarget.dataset.note_moyenne,
+                nb_votant: evt.currentTarget.dataset.nb_votant,
 							},
 						});
 					});
@@ -296,6 +299,26 @@
 					liste.appendChild(fragement);
 				}
 			}
+
+      async function Voter(note){
+        let nouvelleMoyenne = (myNavigator.topPage.data.note_moyenne * myNavigator.topPage.data.nb_votant + note) / (myNavigator.topPage.data.nb_votant + 1);
+        console.log(myNavigator.topPage.data.note_moyenne);
+
+        const body = {
+          "note_moyenne": nouvelleMoyenne,
+          "nb_votant": myNavigator.topPage.data.nb_votant + 1
+        };
+
+        console.log(body);
+
+        const data = await fetch(`http://127.0.0.1:8002/records/Film/${myNavigator.topPage.data.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+      }
 		</script>
 	</body>
 </html>

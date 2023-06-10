@@ -22,6 +22,8 @@ CREATE TABLE Film (
   `annee` integer,
   `sortie` date,
   `duree` integer,
+  `note_moyenne` decimal(2),
+  `nb_votant` integer,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (id)
