@@ -67,7 +67,19 @@
 
 		<template page="carte.html"></template>
 
-		<template page="page1.html"></template>
+		<template id="page1.html">
+				<ons-page id="page1">
+					<!-- <ons-toolbar>
+						<div class="left"><ons-back-button>Home</ons-back-button></div>
+						<div class="center">Acteurs</div>
+					</ons-toolbar> -->
+					<ons-list>
+						<ons-lazy-repeat>
+							
+						</ons-lazy-repeat>
+					</ons-list>
+				</ons-page>
+		</template>
 
 		<template id="ligne_personne">
 			<ons-list-item modifier="chevron" tappable>
