@@ -102,6 +102,7 @@
 					<span class="list-item__title">
 						<span class="prenom"></span>&nbsp;
 						<strong class="nom"></strong>
+            <div class="nbfilm notification"></div>
 					</span>
 					<span class="list-item__subtitle">
 						<span class="naissance"></span>&nbsp;
@@ -287,8 +288,10 @@
 				}
 			}
 			async function getPersonnes() {
-				const data = await fetch("http://127.0.0.1:8002/records/Personne");
+				const data = await fetch("http://127.0.0.1:8002/records/Acteur");
 				const personnes = await data.json();
+
+        console.log("personnes:", personnes);
 
 				listedesacteurs = personnes.records;
 
@@ -327,6 +330,7 @@
 
 				fragement.querySelector(".nom").appendChild(document.createTextNode(personne.nom));
 				fragement.querySelector(".prenom").appendChild(document.createTextNode(personne.prenom));
+        fragement.querySelector(".nbfilm").appendChild(document.createTextNode(personne.nbFilm));
 
 				loadImage(`photos/${personne.id}.jpg`, fragement.querySelector(".list-item__thumbnail"));
 
