@@ -149,10 +149,14 @@
             <use xlink:href="#star" x="300" y="0" onclick="Voter(4)"/>
             <use xlink:href="#star" x="400" y="0" onclick="Voter(5)"/>
           </svg>
+
+          <span id="note"></span>
+          <span id="nb_votant"></span>
+          <span id="moyenne"></span>
         </div>
 			</ons-page>
 		</template>
-
+    
 		<script>
 			let listedesacteurs = [];
 			let listeMarqueurs = new Set(); //Ensemble d'éléments uniques
@@ -286,12 +290,12 @@
         .appendChild(document.createTextNode(equipe.film.annee));*/
         
 					fragement.firstElementChild.addEventListener("click", function (evt) {
-						document.querySelector("#myNavigator").pushPage("fifilmlm.html", {
+						document.querySelector("#myNavigator").pushPage("film.html", {
 							data: {
 								title: `${equipe.film.titre}`,
 								id: evt.currentTarget.dataset.uuid,
-                note_moyenne: evt.currentTarget.dataset.note_moyenne,
-                nb_votant: evt.currentTarget.dataset.nb_votant,
+                note_moyenne: `${equipe.film.note_moyenne}`,
+                nb_votant: `${equipe.film.nb_votant}`,
 							},
 						});
 					});
@@ -301,23 +305,42 @@
 			}
 
       async function Voter(note){
-        let nouvelleMoyenne = (myNavigator.topPage.data.note_moyenne * myNavigator.topPage.data.nb_votant + note) / (myNavigator.topPage.data.nb_votant + 1);
-        console.log(myNavigator.topPage.data.note_moyenne);
+        console.log("note",note);
+        let oldNoteMoyenne = myNavigator.topPage.data.note_moyenne;
+        console.log("oldNoteMoyenne",oldNoteMoyenne);
+
+        let nouvelleMoyenne = 
+          oldNoteMoyenne !== null
+          ? note
+          : (myNavigator.topPage.data.note_moyenne * myNavigator.topPage.data.nb_votant + note) / (myNavigator.topPage.data.nb_votant + 1);
+        
+        console.log("nouvelleMoyenne",nouvelleMoyenne);
+        
+        let oldNbVotant = myNavigator.topPage.data.nb_votant;
+        console.log("oldNbVotant",oldNbVotant);
+        let nouveauNbVotant = oldNbVotant !== null ? 1 : oldNbVotant + 1;
+
+        console.log("nouveauNbVotant",nouveauNbVotant);
 
         const body = {
           "note_moyenne": nouvelleMoyenne,
-          "nb_votant": myNavigator.topPage.data.nb_votant + 1
+          "nb_votant": nouveauNbVotant
         };
 
         console.log(body);
 
         const data = await fetch(`http://127.0.0.1:8002/records/Film/${myNavigator.topPage.data.id}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
           body: JSON.stringify(body)
         });
+        const film = await data.json();
+        console.log(film);
+        myNavigator.topPage.data.note_moyenne = nouvelleMoyenne;
+        myNavigator.topPage.data.nb_votant = nouveauNbVotant;
+        document.querySelector("#note").innerHTML = nouvelleMoyenne;
+        document.querySelector("#nb_votant").innerHTML = nouveauNbVotant;
+        window.event.preventDefault();
+        window.event.stopPropagation();
       }
 		</script>
 	</body>

@@ -1,0 +1,42 @@
+{
+"name": "cinema-pwa",
+"short_name": "Cinema PWA",
+"start_url": "http://127.0.0.1:5500/index.html",
+"display": "standalone",
+"description": "Trouver les séances de vos films préférés",
+"lang": "fr-FR",
+"dir": "ltr",
+"theme_color": "#336699",
+"background_color": "#336699",
+"orientation": "portrait",
+"icons": [
+    {
+        "src": "http://127.0.0.1:5500/assets/icons/cinema-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+    },
+    {
+        "src": "http://127.0.0.1:5500/assets/icons/cinema-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+    }
+],
+"screenshots": [
+    {
+        "src": "http://127.0.0.1:5500/assets/screenshots/screen1.png",
+        "sizes": "2880x1800",
+        "type": "image/png",
+        "description": "A screenshot of the home page"
+    }
+],
+"prefer_related_applications": false,
+"shortcuts": [
+    {
+        "name":"Cinema PWA",
+        "url":"/",
+        "description":"Trouver les séances de vos films préférés"
+    }
+]
+}
