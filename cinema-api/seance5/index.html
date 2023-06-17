@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 		<script src="./html5-qrcode.min.js"></script>
-    <script src="./qrcode.min.js"></script>
+		<script src="./qrcode.min.js"></script>
 	</head>
 	<body>
 		<ons-navigator id="myNavigator" page="home.html"></ons-navigator>
@@ -53,7 +53,7 @@
 					</div>
 
 					<div class="icone">
-						<ons-icon icon="fa-theater-masks" size="9vw" onclick="document.querySelector('#myNavigator').pushPage('ticket.html')" />
+						<ons-icon icon="fa-ticket" size="9vw" onclick="document.querySelector('#myNavigator').pushPage('ticket.html')" />
 					</div>
 				</div>
 			</ons-page>
@@ -75,17 +75,41 @@
 					<div class="left"><ons-back-button>Home</ons-back-button></div>
 					<div class="center">Ticket</div>
 				</ons-toolbar>
-        <div id="reader"></div>
-			  <div class="qrcode"></div>
+				<div id="reader"></div>
+				<div class="qrcode"></div>
 			</ons-page>
-			
 		</template>
 
 		<template id="page1.html">
 			<ons-page id="page1">
+				<style>
+					ons-toolbar:not(.loupe) .center div.recherche {
+						display: none;
+					}
+					ons-toolbar.loupe .center div.recherche {
+						display: initial;
+					}
+					ons-toolbar:not(.loope) .center div:not(.recherche) {
+						display: initial;
+					}
+					ons-toolbar.loupe .center div:not(.recherche) {
+						display: none;
+					}
+
+				</style>
 				<ons-toolbar>
 					<div class="left"><ons-back-button>Home</ons-back-button></div>
-					<div class="center">Acteurs</div>
+					<div class="center">
+						<div>
+							Acteurs
+						</div> 
+						<div class="center recherche">
+							<ons-input type="text" placeholder="Entrer les premières lettres" onkeyup="filterActeurs(this)"></ons-input>
+						</div>
+					</div>
+					<div class="right" style="margin-inline-end: 2em">
+						<ons-icon icon="fa-search" onclick="this.closest('ons-toolbar').classList.toggle('loupe')"></ons-icon>
+					</div>
 				</ons-toolbar>
 				<ons-list>
 					<ons-lazy-repeat></ons-lazy-repeat>
@@ -100,9 +124,11 @@
 				</div>
 				<div class="center">
 					<span class="list-item__title">
+						<span class="nom_artiste"></span>
 						<span class="prenom"></span>&nbsp;
 						<strong class="nom"></strong>
-            <div class="nbfilm notification"></div>
+
+						<div class="nbfilm notification"></div>
 					</span>
 					<span class="list-item__subtitle">
 						<span class="naissance"></span>&nbsp;
@@ -119,7 +145,7 @@
 				</div>
 				<div class="center">
 					<span class="list-item__title">
-						<span class="titre"></span>
+						<span class="titre" data-annee=""></span>
 					</span>
 					<span class="list-item__subtitle">
 						<span class="role"></span>&nbsp;
@@ -127,6 +153,11 @@
 					</span>
 				</div>
 			</ons-list-item>
+			<style>
+				.titre[data-annee="1983"] {
+					color: red;
+				}
+			</style>
 		</template>
 
 		<template id="page2.html">
@@ -151,6 +182,7 @@
 				<div>sortie <span class="sortie"></span></div>
 				<img src="films/1x1.png" width="300" />
 
+				<br />
 				<svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 500 100" class="stars">
 					<defs>
 						<symbol id="star">
@@ -208,6 +240,7 @@
 			}
 
 			let listedesacteurs = [];
+			let listedesacteurs_complet = [];
 			let listeMarqueurs = new Set(); //Ensemble d'éléments uniques
 
 			document.addEventListener("init", function (event) {
@@ -247,7 +280,7 @@
 					};
 
 					const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-          html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback);
+					html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback);
 				}
 			});
 
@@ -291,30 +324,32 @@
 				const data = await fetch("http://127.0.0.1:8002/records/Acteur");
 				const personnes = await data.json();
 
-        console.log("personnes:", personnes);
+				console.log("personnes:", personnes);
 
-				listedesacteurs = personnes.records;
+				listedesacteurs_complet = personnes.records;
+				listedesacteurs = listedesacteurs_complet;
 
-        console.log("personnes.records:", personnes.records);
+				console.log("personnes.records:", personnes.records);
 
-        // keep only where deces is not null
-        listedesacteurs = listedesacteurs.filter((acteur) => acteur.deces !== null);
-        
-        // sort listedesacteurs by nationalite
-        listedesacteurs.sort(function(a, b) {
-          // TODO: or we can a.nationalite.localeCompare(b.nationalite)
-          var x = a.nationalite.toLowerCase();
-          var y = b.nationalite.toLowerCase();
-          if (x < y) {return -1;}
-          if (x > y) {return 1;}
-          return 0;
-        });
-        console.log("listedesacteurs:", listedesacteurs);
+				// keep only where deces is not null
+				listedesacteurs = listedesacteurs.filter((acteur) => acteur.deces !== null);
 
-        
+				// sort listedesacteurs by nationalite
+				listedesacteurs.sort(function (a, b) {
+					// TODO: or we can a.nationalite.localeCompare(b.nationalite)
+					var x = a.nationalite.toLowerCase();
+					var y = b.nationalite.toLowerCase();
+					if (x < y) {
+						return -1;
+					}
+					if (x > y) {
+						return 1;
+					}
+					return 0;
+				});
+				console.log("listedesacteurs:", listedesacteurs);
 
-				
-        const liste = document.querySelector("#page1 ons-lazy-repeat");
+				const liste = document.querySelector("#page1 ons-lazy-repeat");
 
 				liste.delegate = {
 					countItems: () => listedesacteurs.length,
@@ -328,9 +363,14 @@
 				const modele = document.querySelector("#ligne_personne");
 				const fragement = modele.content.cloneNode(true);
 
-				fragement.querySelector(".nom").appendChild(document.createTextNode(personne.nom));
-				fragement.querySelector(".prenom").appendChild(document.createTextNode(personne.prenom));
-        fragement.querySelector(".nbfilm").appendChild(document.createTextNode(personne.nbFilm));
+				if (personne.artiste != null) {
+					fragement.querySelector(".nom_artiste").appendChild(document.createTextNode(personne.artiste));
+				} else {
+					fragement.querySelector(".nom").appendChild(document.createTextNode(personne.nom));
+					fragement.querySelector(".prenom").appendChild(document.createTextNode(personne.prenom));
+				}
+
+				fragement.querySelector(".nbfilm").appendChild(document.createTextNode(personne.nbFilm));
 
 				loadImage(`photos/${personne.id}.jpg`, fragement.querySelector(".list-item__thumbnail"));
 
@@ -393,6 +433,8 @@
 					/*fragement.querySelector(".annee")
         .appendChild(document.createTextNode(equipe.film.annee));*/
 
+					fragement.querySelector(".titre").dataset.annee = equipe.film.annee;
+
 					loadImage(`films/${equipe.film.id}.jpg`, fragement.querySelector("img"));
 
 					fragement.firstElementChild.addEventListener("click", function (evt) {
@@ -406,6 +448,22 @@
 					fragement.firstElementChild.dataset.uuid = equipe.film.id;
 					liste.appendChild(fragement);
 				}
+			}
+
+
+			function filterActeurs(event){
+				console.log(event.value);
+				// filter listedesacteurs by the value of the input
+				listedesacteurs = listedesacteurs_complet.filter((acteur) => acteur.nom_artiste.toLowerCase().includes(event.value.toLowerCase()) );
+				document.querySelector("ons-lazy-repeat").refresh();
+			}
+
+			function updateListeActeurs(filteredList){
+				const liste = document.querySelector("#page1 ons-lazy-repeat");
+				liste.delegate = {
+					countItems: () => filteredList.length,
+					createItemContent: createLigneActeur,
+				};
 			}
 		</script>
 	</body>
